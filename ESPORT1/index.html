@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aimlab Esport</title>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+
+  <!-- Firebase Config Initialization -->
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDZ839gLGlK3hk64lYqvLEJsKn-LG30CJU",
+      authDomain: "aimlab-esport-55fa5.firebaseapp.com",
+      projectId: "aimlab-esport-55fa5",
+      storageBucket: "aimlab-esport-55fa5.appspot.com",
+      messagingSenderId: "899900958561",
+      appId: "1:899900958561:web:e3f85c907963e312ea0720"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+
+    firebase.auth().onAuthStateChanged(user => {
+      if (!user) {
+        window.location.href = "auth.html";
+      }
+    });
+  </script>
+
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* CSS starts */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      background: #111;
+      color: white;
+    }
+
+    header {
+      background: #000;
+      padding: 10px 0;
+    }
+
+    .container {
+      width: 90%;
+      margin: auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      height: 50px;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: white;
+      font-weight: bold;
+    }
+
+    .login-btn {
+      background: #e50914;
+      padding: 8px 15px;
+      border-radius: 5px;
+    }
+
+    .hero {
+      background-image: url('background.jpg');
+      background-size: cover;
+      background-position: center;
+      height: 90vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .hero-text h1 {
+      font-size: 3rem;
+      margin-bottom: 10px;
+    }
+
+    .hero-text p {
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+    }
+
+    .btn {
+      background: #e50914;
+      color: white;
+      padding: 10px 20px;
+      text-decoration: none;
+      font-weight: bold;
+      border-radius: 5px;
+    }
+
+    .tournaments {
+      padding: 50px 20px;
+      background: #1a1a1a;
+      text-align: center;
+    }
+
+    .tournament-card {
+      background: #222;
+      padding: 30px;
+      max-width: 400px;
+      margin: 20px auto;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #000;
+    }
+
+    footer {
+      background: #000;
+      padding: 20px;
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Header Section -->
+  <header>
+    <div class="container">
+      <span class="text-logo">Aimlab<span style="color:#e50914;">Esport</span></span>
+      <nav>
+        <ul>
+          <li><a href="#Home">Home</a></li>
+          <li><a href="tournament.html">Tournament</a></li>
+          <li><a href="wallet.html">Wallet</a></li>
+          <li><a href="profile.html">Profile</a></li>
+          <li><a href="login.html">Login</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-text">
+      <h1>Aimlab Esport Tournament</h1>
+      <p>India's Trusted Esports Platform</p>
+      <a href="#" class="btn">Join Now</a>
+    </div>
+  </section>
+
+</body>
+
+</html>

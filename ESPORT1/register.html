@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aimlab Esport - Register</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Orbitron', sans-serif;
+      background: url('bg.jpg') no-repeat center center fixed;
+      background-size: cover;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .register-box {
+      background: rgba(0, 0, 0, 0.88);
+      padding: 25px 20px;
+      border-radius: 12px;
+      width: 95%;
+      max-width: 380px;
+      color: white;
+      box-shadow: 0 0 15px red;
+    }
+
+    h2 {
+      color: red;
+      text-align: center;
+      font-size: 22px;
+      margin-bottom: 20px;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin: 6px 0;
+      border-radius: 6px;
+      border: none;
+      background-color: #1e1e1e;
+      color: white;
+      font-size: 14px;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      background-color: red;
+      border: none;
+      color: white;
+      font-size: 15px;
+      font-weight: bold;
+      border-radius: 6px;
+      margin-top: 12px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: white;
+      color: red;
+      box-shadow: 0 0 6px white;
+    }
+
+    .loading {
+      pointer-events: none;
+      opacity: 0.7;
+    }
+
+    .spinner {
+      border: 2px solid #fff;
+      border-top: 2px solid red;
+      border-radius: 50%;
+      width: 14px;
+      height: 14px;
+      animation: spin 0.7s linear infinite;
+      display: inline-block;
+      vertical-align: middle;
+      margin-left: 8px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    label {
+      font-size: 13px;
+    }
+
+    a {
+      color: white;
+      font-size: 13px;
+      text-align: center;
+      display: block;
+      margin-top: 15px;
+      text-decoration: underline;
+    }
+
+    #status {
+      text-align: center;
+      margin-top: 10px;
+      font-size: 13px;
+      color: lightgreen;
+    }
+
+    @media screen and (max-width: 450px) {
+      .register-box {
+        padding: 20px 15px;
+        border-radius: 10px;
+      }
+
+      h2 {
+        font-size: 20px;
+      }
+
+      input, select, button {
+        font-size: 13.5px;
+        padding: 9px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="register-box">
+    <h2>Create Your Account</h2>
+
+    <input type="text" id="name" placeholder="Full Name" required />
+    <input type="email" id="email" placeholder="Email Address" required />
+    <input type="password" id="pass" placeholder="Password" required />
+    <input type="password" id="cpass" placeholder="Confirm Password" required />
+
+    
+    <input type="text" id="gameid" placeholder="Free Fire Max UID" required />
+   
+    <input type="tel" id="mobile" placeholder="Mobile Number" required />
+
+    <label>
+      <input type="checkbox" id="agree" /> I agree to the Terms & Conditions
+    </label>
+
+    <button id="registerBtn" onclick="registerUser()">Register</button>
+
+    <div id="status"></div>
+
+    <a href="auth.html">Already have an account? Login</a>
+  </div>
+
+  <script>
+    function registerUser() {
+      const btn = document.getElementById("registerBtn");
+      btn.innerHTML = 'Registering <span class="spinner"></span>';
+      btn.classList.add("loading");
+
+      const name = document.getElementById("name").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const pass = document.getElementById("pass").value;
+      const cpass = document.getElementById("cpass").value;
+      const ign = document.getElementById("ign").value.trim();
+      const gameid = document.getElementById("gameid").value.trim();
+      const mobile = document.getElementById("mobile").value.trim();
+      const agree = document.getElementById("agree").checked;
+      const status = document.getElementById("status");
+
+      if (!agree) {
+        status.innerText = "Please agree to Terms & Conditions";
+        btn.innerText = "Register";
+        btn.classList.remove("loading");
+        return;
+      }
+      if (pass !== cpass) {
+        status.innerText = "Passwords do not match";
+        btn.innerText = "Register";
+        btn.classList.remove("loading");
+        return;
+      }
+
+      // ✅ Local Storage based fake registration (temporary)
+      const userData = {
+        name, email, ign, gameid, game: "Free Fire Max", mobile
+      };
+      localStorage.setItem("aimlab-user", JSON.stringify(userData));
+      status.innerText = "Registration successful (Local Test)";
+      btn.innerText = "Registered";
+
+      setTimeout(() => {
+        window.location.href = "index.html";
+      }, 1000);
+    }
+
+    
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tournaments - Aimlab Esport</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: white;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: row;
+      padding: 20px;
+      gap: 20px;
+    }
+
+    .main-content {
+      flex: 2;
+    }
+
+    .sidebar {
+      flex: 1;
+      background: #1e1e1e;
+      padding: 20px;
+      border-radius: 10px;
+    }
+
+    .tournament-card {
+      background: #1a1a1a;
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      box-shadow: 0 0 10px rgba(255,255,255,0.1);
+    }
+
+    .tournament-card img {
+      width: 100%;
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
+
+    .tournament-card h3 {
+      color: #e50914;
+      margin-bottom: 10px;
+    }
+
+    .tournament-card p {
+      margin: 5px 0;
+      color: #ccc;
+    }
+
+    .register-btn {
+      margin-top: 10px;
+      padding: 10px 20px;
+      background: #e50914;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .register-btn:hover {
+      background: #ff1f28;
+    }
+
+    .sidebar h3 {
+      border-bottom: 1px solid #333;
+      margin-bottom: 15px;
+      padding-bottom: 5px;
+    }
+
+    .upcoming-item {
+      background: #292929;
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 15px;
+    }
+
+    .countdown {
+      font-weight: bold;
+      color: #0f0;
+      margin-top: 10px;
+    }
+
+    @media(max-width: 768px) {
+      .container {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Main Tournament Cards -->
+    <div class="main-content">
+
+      <div class="tournament-card">
+        <img src="background.jpg" alt="Solo Tournament">
+        <h3>🎯 Solo Tournament</h3>
+        <p>Entry Fee: ₹10</p>
+        <p>1st Prize: ₹50</p>
+        <p>2nd Prize: ₹25</p>
+        <p>3rd Prize: ₹10</p>
+        <p>Timing: 25 June 2025 | 6:30 PM</p>
+        <p class="countdown" id="countdown1">Loading...</p>
+        <button class="register-btn" onclick="payNow('Solo', 10)">Register Now</button>
+      </div>
+
+      <div class="tournament-card">
+        <img src="background.jpg" alt="Duo Tournament">
+        <h3>⚔️ Duo Tournament</h3>
+        <p>Entry Fee: ₹20</p>
+        <p>1st Prize: ₹100</p>
+        <p>2nd Prize: ₹50</p>
+        <p>3rd Prize: ₹20</p>
+        <p>Timing: 25 June 2025 | 7:00 PM</p>
+        <p class="countdown" id="countdown2">Loading...</p>
+        <button class="register-btn" onclick="payNow('Duo', 30)">Register Now</button>
+      </div>
+
+      <div class="tournament-card">
+        <img src="background.jpg" alt="Squad Tournament">
+        <h3>🔥 Squad Tournament</h3>
+        <p>Entry Fee: ₹50</p>
+        <p>Prize: ₹500</p>
+        <p>Timing: 25 June 2025 | 8:00 PM</p>
+        <p class="countdown" id="countdown3">Loading...</p>
+        <button class="register-btn" onclick="payNow('Squad', 50)">Register Now</button>
+      </div>
+
+    </div>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <h3>🗓 Upcoming Tournaments</h3>
+
+      <div class="upcoming-item">
+        <p><strong>Clash of Kings</strong></p>
+        <p>Tomorrow - 6 PM</p>
+      </div>
+
+      <div class="upcoming-item">
+        <p><strong>Elite Squad Cup</strong></p>
+        <p>27 June - 7 PM</p>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <script>
+    function payNow(tournamentType, amount) {
+      var options = {
+        "key": "rzp_test_YourKeyID", // Replace with your Razorpay Key ID
+        "amount": amount * 100,
+        "currency": "INR",
+        "name": "Aimlab Esport",
+        "description": tournamentType + " Tournament Entry",
+        "handler": function (response){
+          alert("Payment Successful! ID: " + response.razorpay_payment_id);
+        },
+        "prefill": {
+          "name": "",
+          "email": ""
+        },
+        "theme": {
+          "color": "#e50914"
+        }
+      };
+      var rzp = new Razorpay(options);
+      rzp.open();
+    }
+
+    function startCountdown(id, endTime) {
+      const el = document.getElementById(id);
+
+      function update() {
+        const now = new Date().getTime();
+        const distance = endTime - now;
+
+        if (distance < 0) {
+          el.innerHTML = "Match Started";
+          return;
+        }
+
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        el.innerHTML = `Starts in: ${hours}h ${minutes}m ${seconds}s`;
+      }
+
+      update();
+      setInterval(update, 1000);
+    }
+
+    startCountdown("countdown1", new Date("2025-06-25T18:30:00").getTime());
+    startCountdown("countdown2", new Date("2025-06-25T19:00:00").getTime());
+    startCountdown("countdown3", new Date("2025-06-25T20:00:00").getTime());
+  </script>
+</body>
+</html>
+    

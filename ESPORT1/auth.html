@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Aimlab Esport - Login</title>
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+
+  <!-- Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Orbitron', sans-serif;
+      background: url('bg.jpg') no-repeat center center/cover;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .login-box {
+      background-color: rgba(0, 0, 0, 0.8);
+      padding: 40px;
+      border-radius: 15px;
+      width: 360px;
+      box-shadow: 0 0 20px red;
+      text-align: center;
+      color: white;
+    }
+
+    .login-box h2 {
+      color: red;
+      margin-bottom: 20px;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 8px;
+      background: #1a1a1a;
+      color: white;
+      font-size: 14px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: red;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 14px;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: 0.3s ease;
+    }
+
+    button:hover {
+      background-color: white;
+      color: red;
+      box-shadow: 0 0 10px white;
+    }
+
+    #status {
+      margin-top: 12px;
+      font-size: 13px;
+      color: lightgreen;
+    }
+
+    a {
+      color: #fff;
+      font-size: 13px;
+      display: inline-block;
+      margin-top: 15px;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="login-box">
+    <h2>Welcome Back</h2>
+
+    <input type="text" id="phone" placeholder="+91XXXXXXXXXX" />
+    <div id="recaptcha-container"></div>
+    <button onclick="sendOTP()">Send OTP</button>
+
+    <input type="text" id="otp" placeholder="Enter OTP" />
+    <button onclick="verifyOTP()">Verify OTP</button>
+
+    <hr style="margin: 20px 0; border: 0.5px solid red;">
+
+    <button onclick="signInWithGoogle()">Login with Google</button>
+
+    <div id="status"></div>
+
+    <a onclick="window.location.href='register.html'">New user? Create an account</a>
+  </div>
+
+  <script>
+    // Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyDZ839gLGlK3hk64lYqvLEJsKn-LG30CJU",
+      authDomain: "aimlab-esport-55fa5.firebaseapp.com",
+      projectId: "aimlab-esport-55fa5",
+      storageBucket: "aimlab-esport-55fa5.firebasestorage.app",
+      messagingSenderId: "899900958561",
+      appId: "1:899900958561:web:e3f85c907963e312ea0720",
+      measurementId: "G-037GSX60KT"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    // reCAPTCHA
+    window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
+      size: 'normal',
+      callback: (response) => {
+        console.log("reCAPTCHA Verified");
+      }
+    });
+
+    // Send OTP
+    function sendOTP() {
+      const phone = document.getElementById("phone").value;
+      const btn = document.querySelector("button[onclick='sendOTP()']");
+      btn.innerText = "Sending...";
+      btn.disabled = true;
+
+      auth.signInWithPhoneNumber(phone, window.recaptchaVerifier)
+        .then((confirmationResult) => {
+          window.confirmationResult = confirmationResult;
+          document.getElementById("status").innerText = "OTP sent to " + phone;
+          btn.innerText = "Send OTP";
+          btn.disabled = false;
+        })
+        .catch((error) => {
+          document.getElementById("status").innerText = error.message;
+          btn.innerText = "Send OTP";
+          btn.disabled = false;
+        });
+    }
+
+    // Verify OTP
+    function verifyOTP() {
+      const otp = document.getElementById("otp").value;
+      const btn = document.querySelector("button[onclick='verifyOTP()']");
+      btn.innerText = "Verifying...";
+      btn.disabled = true;
+
+      window.confirmationResult.confirm(otp)
+        .then((result) => {
+          document.getElementById("status").innerText = "Phone verified: " + result.user.phoneNumber;
+          window.location.href = "index.html";
+        })
+        .catch((error) => {
+          document.getElementById("status").innerText = error.message;
+          btn.innerText = "Verify OTP";
+          btn.disabled = false;
+        });
+    }
+
+    // Google Sign In
+    function signInWithGoogle() {
+      const provider = new firebase.auth.GoogleAuthProvider();
+      provider.setCustomParameters({
+        prompt: 'select_account'
+      });
+
+      auth.signInWithPopup(provider)
+        .then((result) => {
+          document.getElementById("status").innerText = "Welcome " + result.user.displayName;
+          window.location.href = "index.html";
+        })
+        .catch((error) => {
+          document.getElementById("status").innerText = error.message;
+        });
+    }
+  </script>
+</body>
+</html>
